@@ -3,6 +3,7 @@ from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
 from .data.research import *
+from .data.research_items import *
 
 class RimWorldItem(Item):
      game: str = "RimWorld"
@@ -25,14 +26,12 @@ def get_items_by_category(category: str) -> Dict[str, RWItemData]:
 
 
 item_table: Dict[str, RWItemData] = {}
-
-
-id_iterator = 1
 def addToItemTable(research_list: list[dict]):
-    global id_iterator
     for research in research_list:
-        item_table[research['label']] = RWItemData('research', id_iterator, ItemClassification.useful)
-        id_iterator+=1
+        label = research['label']
+        id = label_to_item_id[label]
+        item_table[label] = RWItemData('research', id, ItemClassification.useful)
+
 
 addToItemTable(research_1)
 addToItemTable(research_2)
