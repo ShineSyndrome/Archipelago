@@ -273,7 +273,7 @@ Lastly, note the `lookup_id_to_name` dictionary, which is typically imported and
 implementation. This is how Archipelago is told about the items in your world. 
 
 ### Locations.py
-This file lists all locations in the game.  
+This file lists all locations which yield items in the game.
   
 ![Example Locations.py file open in Notepad++](./img/example-locations-py-file.png)  
   
