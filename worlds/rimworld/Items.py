@@ -16,33 +16,27 @@ class RWItemData(NamedTuple):
     weight: int = 1
 
 
-def get_items_by_category(category: str) -> Dict[str, RWItemData]:
-    item_dict: Dict[str, RWItemData] = {}
-    for name, data in item_table.items():
-        if data.category == category:
-            item_dict.setdefault(name, data)
+def build_item_table(royalty: bool, ideology: bool, biotech:bool) -> Dict[str, RWItemData]:
+    item_table: Dict[str, RWItemData] = {}
+    def addToItemTable(research_list: list[dict]):
+        for research in research_list:
+            label = research['label']
+            id = label_to_item_id[label]
+            item_table[label] = RWItemData('research', id, ItemClassification.useful)
 
-    return item_dict
+    addToItemTable(research_1)
+    addToItemTable(research_2)
+    addToItemTable(research_3)
+    addToItemTable(research_4)
+    addToItemTable(research_5)
+    if biotech:
+        addToItemTable(research_biotech_mech)
+        addToItemTable(research_biotech_misc)
+    if ideology:
+        addToItemTable(research_ideology)
+    if royalty:
+        addToItemTable(research_royalty_implants)
+        addToItemTable(research_royalty_music)
+        addToItemTable(research_royalty_apparel)
 
-
-item_table: Dict[str, RWItemData] = {}
-def addToItemTable(research_list: list[dict]):
-    for research in research_list:
-        label = research['label']
-        id = label_to_item_id[label]
-        item_table[label] = RWItemData('research', id, ItemClassification.useful)
-
-
-addToItemTable(research_1)
-addToItemTable(research_2)
-addToItemTable(research_3)
-addToItemTable(research_4)
-addToItemTable(research_5)
-addToItemTable(research_biotech_mech)
-addToItemTable(research_biotech_misc)
-addToItemTable(research_ideology)
-addToItemTable(research_royalty_implants)
-addToItemTable(research_royalty_music)
-addToItemTable(research_royalty_apparel)
-
-pprint.pp(item_table)
+    return item_table

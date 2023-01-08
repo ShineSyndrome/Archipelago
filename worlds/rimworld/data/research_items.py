@@ -1,4 +1,10 @@
 
+'''
+This file contains generated unique ids for RimWorld techs and items.
+This can be useful to both client and server,
+as RimWorld relies on defNames while Archipelago uses numeric ids
+'''
+
 ###############################################################################
 # ID TO DEFNAME
 ###############################################################################

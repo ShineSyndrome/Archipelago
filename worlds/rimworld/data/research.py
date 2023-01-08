@@ -1,4 +1,9 @@
 
+'''
+This file contains raw data from the rimworld xml defs, rewritten as 
+ python dictionaries for easier and faster use by archipelago
+'''
+
 ###############################################################################
 # RESEARCH_1
 ###############################################################################
