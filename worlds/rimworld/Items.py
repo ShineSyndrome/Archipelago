@@ -1,42 +1,51 @@
-import pprint
+import timeit
 from typing import Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
 from .data.research import *
 from .data.research_items import *
 
-class RimWorldItem(Item):
-     game: str = "RimWorld"
 
-class RWItemData(NamedTuple):
+class RimWorldItem(Item):
+    game: str = "RimWorld"
+
+
+class RimWorldItemData(NamedTuple):
     category: str
+    expansion: str
     code: Optional[int] = None
     classification: ItemClassification = ItemClassification.filler
     max_quantity: int = 1
     weight: int = 1
 
+item_table: Dict[str, RimWorldItemData] = {
+    # TODO remove meaningless 'filler'
+    'filler': RimWorldItemData('Filler', 'core', 2001, ItemClassification.filler, 999)
+}
 
-def build_item_table(royalty: bool, ideology: bool, biotech:bool) -> Dict[str, RWItemData]:
-    item_table: Dict[str, RWItemData] = {}
-    def addToItemTable(research_list: list[dict]):
-        for research in research_list:
-            label = research['label']
-            id = label_to_item_id[label]
-            item_table[label] = RWItemData('research', id, ItemClassification.useful)
+def addToItemTable(list: list[dict], category: str, expansion: str, classification = ItemClassification.useful):
+    for item in list:
+        label = item['label']
+        id = label_to_item_id[label]
+        item_table[label] = RimWorldItemData(category, expansion, id, classification)
 
-    addToItemTable(research_1)
-    addToItemTable(research_2)
-    addToItemTable(research_3)
-    addToItemTable(research_4)
-    addToItemTable(research_5)
-    if biotech:
-        addToItemTable(research_biotech_mech)
-        addToItemTable(research_biotech_misc)
-    if ideology:
-        addToItemTable(research_ideology)
-    if royalty:
-        addToItemTable(research_royalty_implants)
-        addToItemTable(research_royalty_music)
-        addToItemTable(research_royalty_apparel)
+addToItemTable(research_1, 'research', 'core')
+addToItemTable(research_2, 'research', 'core')
+addToItemTable(research_3, 'research', 'core')
+addToItemTable(research_4, 'research', 'core')
+addToItemTable(research_5, 'research', 'core')
+addToItemTable(research_biotech_mech, 'research', 'biotech')
+addToItemTable(research_biotech_misc, 'research', 'biotech')
+addToItemTable(research_ideology, 'research', 'ideology')
+addToItemTable(research_royalty_implants, 'research', 'royalty')
+addToItemTable(research_royalty_music, 'research', 'royalty')
+addToItemTable(research_royalty_apparel, 'research', 'royalty')
 
-    return item_table
+
+def get_items_by_category(category: str) -> Dict[str, RimWorldItem]:
+    item_dict: Dict[str, RimWorldItem] = {}
+    for name, data in item_table.items():
+        if data.category == category:
+            item_dict.setdefault(name, data)
+
+    return item_dict
