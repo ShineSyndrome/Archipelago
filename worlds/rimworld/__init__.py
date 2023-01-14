@@ -1,6 +1,8 @@
+import json
 from typing import List, Dict
 
 from BaseClasses import Entrance, Region, RegionType, Tutorial
+from . import Constants
 from .Items import item_table, RimWorldItem, get_items_by_category
 from .Locations import build_location_table, RimWorldLocation, RimWorldLocationData
 from .Options import rimworld_options
@@ -30,11 +32,12 @@ class RimWorldWorld(World):
     game = "RimWorld"
     web = RimWorldWeb()
     option_definitions = rimworld_options
+    # not all of these items will be present in every game but there needs to be a fixed name:id mapping here
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_table: Dict[str, RimWorldLocationData] = build_location_table(50, 50, 20)
-    location_name_to_id = {name: data.code for name, data in location_table.items()}
+    # not all of these locations will be present in every game but there needs to be a fixed name:id mapping here
+    location_name_to_id = {name: data.code for name, data in build_location_table(300, 300, 300).items()}
 
-    topology_present: bool = False  # show path to required location checks in spoiler
+    topology_present = False  # show path to required location checks in spoiler
 
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
@@ -42,7 +45,27 @@ class RimWorldWorld(World):
     data_version = 0
 
     def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
+        return getattr(self.multiworld, name)[self.player].value
+
+    def create_regions(self):
+        # some basic regions are needed for any game to work in archipelago
+        player = self.player
+        menu = Region("Menu", RegionType.Generic, "Menu", player, self.multiworld)
+        game_start = Entrance(player, "Start Game", menu)
+        menu.exits.append(game_start)
+        planet = Region("RimWorld", RegionType.Generic, "RimWorld", player, self.multiworld)
+        game_start.connect(planet)
+        self.multiworld.regions += [menu, planet]
+
+        # add locations
+        self.locations_data = build_location_table(
+            self.get_setting(Constants.Options.RESEARCH_LOCATIONS_QUANTITY),
+            self.get_setting(Constants.Options.CRAFT_LOCATIONS_QUANTITY),
+            self.get_setting(Constants.Options.PURCHASE_LOCATIONS_QUANTITY),
+        )
+        self.locations: List[RimWorldLocation] = [RimWorldLocation(player, name, loc.code, planet)
+                                                  for name, loc in self.locations_data.items()]
+        planet.locations.extend(self.locations)
 
     def fill_slot_data(self) -> dict:
         return {option_name: self.get_setting(option_name).value for option_name in rimworld_options}
@@ -53,13 +76,14 @@ class RimWorldWorld(World):
         for name, data in item_table.items():
             quantity = data.max_quantity
 
-            if data.category == "Filler":
+            if data.category == Constants.Items.Categories.FILLER:
                 continue
-            if not self.get_setting('royalty_expansion') and data.expansion == 'royalty':
+            if not self.get_setting(Constants.Options.ROYALTY) and data.expansion == Constants.Items.Expansions.ROYALTY:
                 continue
-            if not self.get_setting('ideology_expansion') and data.expansion == 'ideology':
+            if not self.get_setting(
+                    Constants.Options.IDEOLOGY) and data.expansion == Constants.Items.Expansions.IDEOLOGY:
                 continue
-            if not self.get_setting('biotech_expansion') and data.expansion == 'biotech':
+            if not self.get_setting(Constants.Options.BIOTECH) and data.expansion == Constants.Items.Expansions.BIOTECH:
                 continue
             quantity = data.max_quantity
             item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -72,7 +96,7 @@ class RimWorldWorld(World):
 
     def get_filler_item_name(self) -> str:
         # TODO
-        fillers = get_items_by_category("Filler")
+        fillers = get_items_by_category(Constants.Items.Categories.FILLER)
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
@@ -80,15 +104,16 @@ class RimWorldWorld(World):
         data = item_table[name]
         return RimWorldItem(name, data.classification, data.code, self.player)
 
-    def create_regions(self):
-        player = self.player
-        menu = Region("Menu", RegionType.Generic, "Menu", player, self.multiworld)
-        crash = Entrance(player, "Crash Land", menu)
-        menu.exits.append(crash)
-        planet = Region("RimWorld", RegionType.Generic, "RimWorld", player, self.multiworld)
-        self.locations: List[RimWorldLocation] = [RimWorldLocation(player, name, loc.code, planet)
-                                                  for name, loc in RimWorldWorld.location_table.items()]
-        planet.locations.extend(self.locations)
+    def fill_slot_data(self) -> Dict[str, object]:
+        slot_data: Dict[str, object] = {}
 
-        crash.connect(planet)
-        self.multiworld.regions += [menu, planet]
+        research_locations = [value for key, value in self.locations_data.items()
+                              if value.category == Constants.Locations.Categories.RESEARCH]
+        tech_tree = Locations.BuildResearchTechTree(
+            research_locations,
+            self.get_setting(Constants.Options.MIN_RESEARCH_COST),
+            self.get_setting(Constants.Options.MAX_RESEARCH_COST)
+        )
+        slot_data['techTree'] = tech_tree #json.dumps(tech_tree, separators=(',', ':'))
+
+        return slot_data

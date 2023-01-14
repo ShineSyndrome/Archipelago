@@ -8,8 +8,11 @@ This script requires that all supported expansions and mods are installed.
 
 import pprint
 import xml.etree.ElementTree as ET
+from typing import Set
 
 import xmltodict
+
+#from worlds.rimworld import data
 
 # change this to your rimworld installation path, the other relative paths should unchanged.
 RimWorldPath = 'F:\SteamLibrary\steamapps\common\RimWorld'
@@ -81,7 +84,7 @@ def add_numeric_ids(list: list[dict]):
 
 
 def main():
-    researches = {
+    researches: dict[list] = {
         'research_1': read_research_xml(CorePath + '\ResearchProjects_1.xml'),
         'research_2': read_research_xml(CorePath + '\ResearchProjects_2_Electricity.xml'),
         'research_3': read_research_xml(CorePath + '\ResearchProjects_3_Microelectronics.xml'),
@@ -124,6 +127,28 @@ def main():
         f.write('item_id_to_label = {}'.format(pp.pformat(item_id_to_label)))
         f.write(header('label to id'))
         f.write('label_to_item_id = {}'.format(pp.pformat(label_to_item_id)))
+
+    def analyze_positions():
+        values = [research for sublist in researches.values() for research in sublist]
+        max_x = 0
+        max_y = 0
+        x_set: Set[float] = set()
+        y_set: Set[float] = set()
+        for research in values:
+            try:
+                x:float = float(research['researchViewX'])
+                y:float = float(research['researchViewY'])
+                max_x = max(max_x, x)
+                max_y = max(max_y, y)
+                x_set.add(x)
+                y_set.add(y)
+            except:
+                raise
+        print(f"max x {max_x}")
+        print(f"max y {max_y}")
+        print(f"x set {x_set}")
+        print(f"y_set {y_set}")
+    #analyze_positions()
 
 
 if __name__ == "__main__":
