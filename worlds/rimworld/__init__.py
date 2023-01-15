@@ -1,12 +1,13 @@
 import json
 from typing import List, Dict
 
-from BaseClasses import Entrance, Region, RegionType, Tutorial
+from BaseClasses import Entrance, Region, RegionType, Tutorial, MultiWorld
 from . import Constants
 from .Items import item_table, RimWorldItem, get_items_by_category
 from .Locations import build_location_table, RimWorldLocation, RimWorldLocationData
 from .Options import rimworld_options
 from ..AutoWorld import WebWorld, World
+from .data import research_items
 
 
 class RimWorldWeb(WebWorld):
@@ -43,6 +44,15 @@ class RimWorldWorld(World):
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
     data_version = 0
+
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
+        self.locations: List[RimWorldLocation] = []
+        self.archipelago_id_to_rimworld_def: Dict[int, tuple[str, str]] = {
+            key: (value, "ResearchProjectDef")
+            for key, value in research_items.item_id_to_defName.items()
+        }
+
 
     def get_setting(self, name: str):
         return getattr(self.multiworld, name)[self.player].value
@@ -115,5 +125,7 @@ class RimWorldWorld(World):
             self.get_setting(Constants.Options.MAX_RESEARCH_COST)
         )
         slot_data['techTree'] = tech_tree #json.dumps(tech_tree, separators=(',', ':'))
+
+        slot_data['defNameMap'] = self.archipelago_id_to_rimworld_def
 
         return slot_data
