@@ -11,7 +11,8 @@ class RimWorldLocation(Location):
 
 class RimWorldLocationData(NamedTuple):
     category: str
-    code: int
+    archipelago_id: int
+
 
 def build_location_table(research: int, craft: int, buy: int) -> Dict[str, RimWorldLocationData]:
     return {
@@ -33,8 +34,9 @@ class ResearchLocationData(NamedTuple):
     prerequisites: List[int]
 
 
-def BuildResearchTechTree(researches: List[RimWorldLocationData], min_cost, max_cost) \
-        -> Dict[int, ResearchLocationData]:
+def build_research_tech_tree(researches: List[RimWorldLocationData], min_cost, max_cost) \
+        -> Dict[int, Dict]:
+    # -> Dict[int, ResearchLocationData]:
     '''
     outputs all the ResearchLocationData Rimworld needs to set up the research tree
     each piece of metadata is keyed by their corresponding location's Archipelago code
@@ -48,7 +50,7 @@ def BuildResearchTechTree(researches: List[RimWorldLocationData], min_cost, max_
     EMPTY_CHANCE_PERCENT = 10
     TWO_PREREQUISITES_CHANCE = 20
     NO_PREREQUISITES_CHANCE = 0
-    #TODO make options of the above?
+    # TODO make options of the above?
     output = {}
 
     # temporary grid building iteration
@@ -63,11 +65,11 @@ def BuildResearchTechTree(researches: List[RimWorldLocationData], min_cost, max_
     # create grid of research
     for research in researches:
         # chance for empty, skip one space
-        if (not column_has_empty and random.randint(0, 100) < EMPTY_CHANCE_PERCENT):
+        if not column_has_empty and random.randint(0, 100) < EMPTY_CHANCE_PERCENT:
             column_has_empty = True
             y += 1
         # start new column
-        if y > ROWS-1:
+        if y > ROWS - 1:
             y -= ROWS
             x += 1
             column_has_empty = False
@@ -75,7 +77,7 @@ def BuildResearchTechTree(researches: List[RimWorldLocationData], min_cost, max_
             current_column = [None] * ROWS
 
         # place research in table
-        current_column[y] = research.code
+        current_column[y] = research.archipelago_id
 
         # make prerequisites
         prerequisites: list[int] = []
@@ -84,7 +86,7 @@ def BuildResearchTechTree(researches: List[RimWorldLocationData], min_cost, max_
             prereq = table[x - 1][y]
             if prereq is not None:
                 valid_prerequisites.append(prereq)
-            if y < ROWS-1:
+            if y < ROWS - 1:
                 prereq = table[x - 1][y + 1]
                 if prereq is not None:
                     valid_prerequisites.append(prereq)
@@ -95,10 +97,11 @@ def BuildResearchTechTree(researches: List[RimWorldLocationData], min_cost, max_
             k = 1
             if random.randint(0, 100) < TWO_PREREQUISITES_CHANCE:
                 k = min(len(valid_prerequisites), 2)
-            prerequisites:list[int] = random.sample(valid_prerequisites, k=k)
+            prerequisites: list[int] = random.sample(valid_prerequisites, k=k)
 
         # build output data
-        output[research.code] = ResearchLocationData(x, y, current_cost, prerequisites)._asdict()
+        output[research.archipelago_id] = ResearchLocationData(x, y, current_cost, prerequisites)._asdict()
+        # using _asdict() for now because named tuple serializes pretty weird
 
         # prepare next iteration
         y += 1

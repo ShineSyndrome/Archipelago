@@ -12,14 +12,14 @@ from typing import Set
 
 import xmltodict
 
-#from worlds.rimworld import data
+# from worlds.rimworld import data
 
 # change this to your rimworld installation path, the other relative paths should unchanged.
-RimWorldPath = 'F:\SteamLibrary\steamapps\common\RimWorld'
-CorePath = RimWorldPath + '\Data\Core\Defs\ResearchProjectDefs'
-BiotechPath = RimWorldPath + '\Data\Biotech\Defs\ResearchProjectDefs'
-IdeologyPath = RimWorldPath + '\Data\Ideology\Defs\ResearchProjectDefs'
-RoyaltyPath = RimWorldPath + '\Data\Royalty\Defs\ResearchProjectDefs'
+RimWorldPath = 'F:\\SteamLibrary\\steamapps\\common\\RimWorld'
+CorePath = RimWorldPath + '\\Data\\Core\\Defs\\ResearchProjectDefs'
+BiotechPath = RimWorldPath + '\\Data\\Biotech\\Defs\\ResearchProjectDefs'
+IdeologyPath = RimWorldPath + '\\Data\\Ideology\\Defs\\ResearchProjectDefs'
+RoyaltyPath = RimWorldPath + '\\Data\\Royalty\\Defs\\ResearchProjectDefs'
 
 
 def read_xml(path: str) -> dict:
@@ -78,24 +78,24 @@ def add_numeric_ids(list: list[dict]):
             item_id_to_defName[item_id] = research['defName']
             item_id_to_label[item_id] = research['label']
             label_to_item_id[research['label']] = item_id
-        except BaseException as exception:
+        except BaseException:
             pp.pprint(research)
             raise
 
 
 def main():
-    researches: dict[list] = {
-        'research_1': read_research_xml(CorePath + '\ResearchProjects_1.xml'),
-        'research_2': read_research_xml(CorePath + '\ResearchProjects_2_Electricity.xml'),
-        'research_3': read_research_xml(CorePath + '\ResearchProjects_3_Microelectronics.xml'),
-        'research_4': read_research_xml(CorePath + '\ResearchProjects_4_MultiAnalyzer.xml'),
-        'research_5': read_research_xml(CorePath + '\ResearchProjects_5_Ship.xml'),
-        'research_biotech_mech': read_research_xml(BiotechPath + '\ResearchProjects_Mechanitor.xml'),
-        'research_biotech_misc': read_research_xml(BiotechPath + '\ResearchProjects_Misc.xml'),
-        'research_ideology': read_research_xml(IdeologyPath + '\ResearchProjects_Misc.xml'),
-        'research_royalty_apparel': read_research_xml(RoyaltyPath + '\ResearchProjects_Apparel.xml'),
-        'research_royalty_implants': read_research_xml(RoyaltyPath + '\ResearchProjects_Implants.xml'),
-        'research_royalty_music': read_research_xml(RoyaltyPath + '\ResearchProjects_MusicalInstruments.xml'),
+    researches: dict[str:list] = {
+        'research_1': read_research_xml(CorePath + '\\ResearchProjects_1.xml'),
+        'research_2': read_research_xml(CorePath + '\\ResearchProjects_2_Electricity.xml'),
+        'research_3': read_research_xml(CorePath + '\\ResearchProjects_3_Microelectronics.xml'),
+        'research_4': read_research_xml(CorePath + '\\ResearchProjects_4_MultiAnalyzer.xml'),
+        'research_5': read_research_xml(CorePath + '\\ResearchProjects_5_Ship.xml'),
+        'research_biotech_mech': read_research_xml(BiotechPath + '\\ResearchProjects_Mechanitor.xml'),
+        'research_biotech_misc': read_research_xml(BiotechPath + '\\ResearchProjects_Misc.xml'),
+        'research_ideology': read_research_xml(IdeologyPath + '\\ResearchProjects_Misc.xml'),
+        'research_royalty_apparel': read_research_xml(RoyaltyPath + '\\ResearchProjects_Apparel.xml'),
+        'research_royalty_implants': read_research_xml(RoyaltyPath + '\\ResearchProjects_Implants.xml'),
+        'research_royalty_music': read_research_xml(RoyaltyPath + '\\ResearchProjects_MusicalInstruments.xml'),
     }
 
     def header(string: str) -> str:
@@ -136,8 +136,8 @@ def main():
         y_set: Set[float] = set()
         for research in values:
             try:
-                x:float = float(research['researchViewX'])
-                y:float = float(research['researchViewY'])
+                x: float = float(research['researchViewX'])
+                y: float = float(research['researchViewY'])
                 max_x = max(max_x, x)
                 max_y = max(max_y, y)
                 x_set.add(x)
@@ -148,7 +148,7 @@ def main():
         print(f"max y {max_y}")
         print(f"x set {x_set}")
         print(f"y_set {y_set}")
-    #analyze_positions()
+    # analyze_positions()
 
 
 if __name__ == "__main__":

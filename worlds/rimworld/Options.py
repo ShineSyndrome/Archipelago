@@ -37,6 +37,7 @@ class TechLocationsQuantity(Range):
     range_start = 0
     range_end = 300
 
+
 class CraftingLocationsQuantity(Range):
     """
     How many Archipelago items are added to the Archipelago work bench.
@@ -45,6 +46,7 @@ class CraftingLocationsQuantity(Range):
     default = 50
     range_start = 0
     range_end = 300
+
 
 class PurchasableLocationsQuantity(Range):
     """
@@ -56,7 +58,7 @@ class PurchasableLocationsQuantity(Range):
     range_end = 300
 
 
-class MinimumResarchCost(Range):
+class MinimumResearchCost(Range):
     """
     How much work does it take to research the least expensive Archipelago item.
     """
@@ -65,7 +67,8 @@ class MinimumResarchCost(Range):
     range_start = 10
     range_end = 3000
 
-class MaximumResarchCost(Range):
+
+class MaximumResearchCost(Range):
     """
     How much work does it take to research the most expensive Archipelago item.
     """
@@ -83,6 +86,6 @@ rimworld_options: typing.Dict[str, type(Option)] = {
     Options.RESEARCH_LOCATIONS_QUANTITY: TechLocationsQuantity,
     Options.CRAFT_LOCATIONS_QUANTITY: CraftingLocationsQuantity,
     Options.PURCHASE_LOCATIONS_QUANTITY: PurchasableLocationsQuantity,
-    Options.MAX_RESEARCH_COST: MaximumResarchCost,
-    Options.MIN_RESEARCH_COST: MinimumResarchCost,
+    Options.MAX_RESEARCH_COST: MaximumResearchCost,
+    Options.MIN_RESEARCH_COST: MinimumResearchCost,
 }

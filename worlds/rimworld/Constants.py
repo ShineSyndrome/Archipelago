@@ -2,26 +2,27 @@
 IDE friendly way to handle those string references easily and correctly :)
 '''
 
-class Locations():
-    class Categories():
+
+class Locations:
+    class Categories:
         RESEARCH = "Research"
         CRAFTING = "Craft"
         PURCHASE = "Purchase"
 
 
-class Items():
-    class Categories():
+class Items:
+    class Categories:
         RESEARCH = "research"
         FILLER = "filler"
 
-    class Expansions():
+    class Expansions:
         CORE = "core"
         IDEOLOGY = "ideology"
         ROYALTY = "royalty"
         BIOTECH = "biotech"
 
 
-class Options():
+class Options:
     ROYALTY = "royalty"
     IDEOLOGY = "ideology"
     BIOTECH = "biotech"
