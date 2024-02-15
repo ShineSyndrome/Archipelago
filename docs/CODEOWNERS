@@ -116,11 +116,14 @@
 # Raft
 /worlds/raft/ @SunnyBat
 
-# Rogue Legacy
-/worlds/rogue_legacy/ @ThePhar
+# Rimworld
+/worlds/rimworld/ @ShineSyndrome
 
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
+
+# Rogue Legacy
+/worlds/rogue_legacy/ @ThePhar
 
 # Shivers
 /worlds/shivers/ @GodlFire

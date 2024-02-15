@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from BaseClasses import Entrance, Region, RegionType, Tutorial, MultiWorld
+from BaseClasses import Entrance, Region, Tutorial, MultiWorld
 from . import Constants
 from .Items import item_table, RimWorldItem, get_items_by_category
 from .Locations import build_location_table, RimWorldLocation, RimWorldLocationData
@@ -59,10 +59,10 @@ class RimWorldWorld(World):
     def create_regions(self):
         # some basic regions are needed for any game to work in archipelago
         player = self.player
-        menu = Region("Menu", RegionType.Generic, "Menu", player, self.multiworld)
+        menu = Region("Menu", player, self.multiworld)
         game_start = Entrance(player, "Start Game", menu)
         menu.exits.append(game_start)
-        planet = Region("RimWorld", RegionType.Generic, "RimWorld", player, self.multiworld)
+        planet = Region("RimWorld", player, self.multiworld)
         game_start.connect(planet)
         self.multiworld.regions += [menu, planet]
 
