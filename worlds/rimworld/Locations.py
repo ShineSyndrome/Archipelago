@@ -1,110 +1,130 @@
-import random
-from typing import Dict, NamedTuple, List, Optional
+from typing import Dict, NamedTuple
 
-from BaseClasses import Location
-from .Constants import Locations
-
-
-class RimWorldLocation(Location):
-    game: str = "RimWorld"
-
+from .constants import Locations, Researches, Expansions
 
 class RimWorldLocationData(NamedTuple):
+    name: str
     category: str
-    archipelago_id: int
+    expansions: str
 
+simple_research_locations: Dict[int, RimWorldLocationData] = {
+    11_001, {Researches.PSYCHOIDBREWING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_002, {Researches.TREESOWING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_003, {Researches.BREWING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_004, {Researches.COMPLEXFURNITURE, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_005, {Researches.PASSIVECOOLER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_006, {Researches.STONECUTTING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_007, {Researches.COMPLEXCLOTHING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_008, {Researches.DRUGPRODUCTION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_009, {Researches.COCOA, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_010, {Researches.DEVILSTRAND, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_011, {Researches.CARPETMAKING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_012, {Researches.PEMMICAN, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_013, {Researches.SMITHING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_014, {Researches.RECURVEBOW, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_015, {Researches.PSYCHITEREFINING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_016, {Researches.WAKEUPPRODUCTION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_017, {Researches.GOJUICEPRODUCTION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_018, {Researches.PENOXYCYLINEPRODUCTION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_019, {Researches.LONGBLADES, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_020, {Researches.PLATEARMOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_021, {Researches.GREATBOW, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_022, {Researches.ELECTRICITY, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_023, {Researches.BATTERIES, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_024, {Researches.BIOFUELREFINING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_025, {Researches.WATERMILLGENERATOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_026, {Researches.NUTRIENTPASTE, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_027, {Researches.SOLARPANELS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_028, {Researches.AIRCONDITIONING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_029, {Researches.AUTODOORS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_030, {Researches.HYDROPONICS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_031, {Researches.TUBETELEVISION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_032, {Researches.PACKAGEDSURVIVALMEAL, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_033, {Researches.FIREFOAM, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_034, {Researches.IEDS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_035, {Researches.GEOTHERMALPOWER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_036, {Researches.STERILEMATERIALS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_037, {Researches.COLOREDLIGHTS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_038, {Researches.MACHINING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_039, {Researches.SMOKEPOPBELT, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_040, {Researches.PROSTHETICS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_041, {Researches.GUNSMITHING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_042, {Researches.FLAKARMOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_043, {Researches.MORTARS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_044, {Researches.BLOWBACKOPERATION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_045, {Researches.GASOPERATION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_046, {Researches.GUNTURRETS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_047, {Researches.FOAMTURRET, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_048, {Researches.MICROELECTRONICSBASICS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_049, {Researches.BASICMECHTECH, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_050, {Researches.STANDARDMECHTECH, Locations.Categories.RESEARCH, Expansions.BIOTECH}, 
+    11_051, {Researches.WASTEPACKATOMIZER, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_052, {Researches.TOXIFIERGENERATOR, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_053, {Researches.XENOGERMINATION, Locations.Categories.RESEARCH, Expansions.BIOTECH}, 
+    11_054, {Researches.DEATHREST, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_055, {Researches.FERTILITYPROCEDURES, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_056, {Researches.TOXGAS, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_057, {Researches.TOXFILTRATION, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_058, {Researches.NOBLEAPPAREL, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_059, {Researches.ROYALAPPAREL, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_060, {Researches.COMPACTWEAPONRY, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_061, {Researches.HARP, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_062, {Researches.HARPSICHORD, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_063, {Researches.PIANO, Locations.Categories.RESEARCH, Expansions.ROYALTY},                            
+}
 
-def build_location_table(research: int, craft: int, buy: int) -> Dict[str, RimWorldLocationData]:
-    return {
-        **{f"Research {i + 1}": RimWorldLocationData(Locations.Categories.RESEARCH, 11_000 + i) for i in
-           range(0, research)},
-        **{f"Craft {i + 1}": RimWorldLocationData(Locations.Categories.CRAFTING, 12_000 + i) for i in range(0, craft)},
-        **{f"Purchase {i + 1}": RimWorldLocationData(Locations.Categories.PURCHASE, 13_000 + i) for i in range(0, buy)},
-    }
+hitech_research_locations = Dict[int, RimWorldLocationData] = {
+    11_064, {Researches.FLATSCREENTELEVISION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_065, {Researches.MOISTUREPUMP, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_066, {Researches.HOSPITALBED, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_067, {Researches.DEEPDRILLING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_068, {Researches.GROUNDPENETRATINGSCANNER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_069, {Researches.TRANSPORTPOD, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_070, {Researches.MEDICINEPRODUCTION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_071, {Researches.LONGRANGEMINERALSCANNER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_072, {Researches.SHIELDBELT, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_073, {Researches.PRECISIONRIFLING, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_074, {Researches.HEAVYTURRETS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_075, {Researches.MULTIBARRELWEAPONS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_076, {Researches.MULTIANALYZER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_077, {Researches.GENEPROCESSOR, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_078, {Researches.ARCHOGENETICS, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_079, {Researches.GROWTHVATS, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_080, {Researches.BIOSCULPTING, Locations.Categories.RESEARCH, Expansions.IDEOLOGY},
+    11_081, {Researches.BIOREGENERATION, Locations.Categories.RESEARCH, Expansions.IDEOLOGY},
+    11_082, {Researches.NEURALSUPERCHARGER, Locations.Categories.RESEARCH, Expansions.IDEOLOGY},
+    11_083, {Researches.JUMPPACK, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_084, {Researches.GUNLINK, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_085, {Researches.BRAINWIRING, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_086, {Researches.SPECIALIZEDLIMBS, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_087, {Researches.VENOMSYNTHESIS, Locations.Categories.RESEARCH, Expansions.ROYALTY},             
+}
 
-
-class ResearchLocationData(NamedTuple):
-    '''
-    important research metadata used by RimWorld like
-    research costs, prerequisites, and their rendered position in the tech tree
-    '''
-    x: int
-    y: int
-    cost: int
-    prerequisites: List[int]
-
-
-def build_research_tech_tree(researches: List[RimWorldLocationData], min_cost, max_cost) \
-        -> Dict[int, Dict]:
-    # -> Dict[int, ResearchLocationData]:
-    '''
-    outputs all the ResearchLocationData Rimworld needs to set up the research tree
-    each piece of metadata is keyed by their corresponding location's Archipelago code
-
-    :param researches: a list of RimWorldLocationData for research locations in this game instance
-    :param min_cost: the cheapest research cost that will be created
-    :param max_cost: the final and most expensive research cost that will be created
-    :return: location code to ResearchLocationData dictionary
-    '''
-    ROWS = 5
-    EMPTY_CHANCE_PERCENT = 10
-    TWO_PREREQUISITES_CHANCE = 20
-    NO_PREREQUISITES_CHANCE = 0
-    # TODO make options of the above?
-    output = {}
-
-    # temporary grid building iteration
-    table: List[List[Optional[int]]] = []
-    x = 0
-    y = 0
-    column_has_empty = False
-    current_column: List[Optional[int]] = [None] * ROWS
-    cost_increment = (max_cost - min_cost) / len(researches)
-    current_cost = min_cost
-
-    # create grid of research
-    for research in researches:
-        # chance for empty, skip one space
-        if not column_has_empty and random.randint(0, 100) < EMPTY_CHANCE_PERCENT:
-            column_has_empty = True
-            y += 1
-        # start new column
-        if y > ROWS - 1:
-            y -= ROWS
-            x += 1
-            column_has_empty = False
-            table.append(current_column)
-            current_column = [None] * ROWS
-
-        # place research in table
-        current_column[y] = research.archipelago_id
-
-        # make prerequisites
-        prerequisites: list[int] = []
-        if x > 0 and random.randint(0, 100) >= NO_PREREQUISITES_CHANCE:
-            valid_prerequisites = []
-            prereq = table[x - 1][y]
-            if prereq is not None:
-                valid_prerequisites.append(prereq)
-            if y < ROWS - 1:
-                prereq = table[x - 1][y + 1]
-                if prereq is not None:
-                    valid_prerequisites.append(prereq)
-            if y > 0:
-                prereq = table[x - 1][y - 1]
-                if prereq is not None:
-                    valid_prerequisites.append(prereq)
-            k = 1
-            if random.randint(0, 100) < TWO_PREREQUISITES_CHANCE:
-                k = min(len(valid_prerequisites), 2)
-            prerequisites: list[int] = random.sample(valid_prerequisites, k=k)
-
-        # build output data
-        output[research.archipelago_id] = ResearchLocationData(x, y, current_cost, prerequisites)._asdict()
-        # using _asdict() for now because named tuple serializes pretty weird
-
-        # prepare next iteration
-        y += 1
-        current_cost += cost_increment
-
-    return output
+multi_analyzer_research_locations = Dict[int, RimWorldLocationData] = {
+    11_088, {Researches.VITALSMONITOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_089, {Researches.FABRICATION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_090, {Researches.ADVANCEDFABRICATION, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_091, {Researches.CRYPTOSLEEP, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_092, {Researches.RECONARMOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_093, {Researches.POWEREDARMOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_094, {Researches.CHARGEDSHOT, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_095, {Researches.BIONICS, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_096, {Researches.SNIPERTURRET, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_097, {Researches.ROCKETSWARMLAUNCHER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_098, {Researches.SHIPBASICS, Locations.Categories.RESEARCH, Expansions.CORE},   
+    11_099, {Researches.SHIPCRYPTOSLEEP, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_100, {Researches.SHIPREACTOR, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_101, {Researches.SHIPENGINE, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_102, {Researches.SHIPCOMPUTERCORE, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_103, {Researches.SHIPSENSORCLUSTER, Locations.Categories.RESEARCH, Expansions.CORE},
+    11_104, {Researches.HIGHMECHTECH, Locations.Categories.RESEARCH, Expansions.BIOTECH},  
+    11_105, {Researches.ULTRAMECHTECH, Locations.Categories.RESEARCH, Expansions.BIOTECH},
+    11_106, {Researches.CATAPHRACTARMOR, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_107, {Researches.ARTIFICIALMETABOLISM, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_108, {Researches.NEURALCOMPUTATION, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_109, {Researches.SKINHARDENING, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_110, {Researches.HEALINGFACTORS, Locations.Categories.RESEARCH, Expansions.ROYALTY},  
+    11_111, {Researches.FLESHSHAPING, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_112, {Researches.MOLECULARANALYSIS, Locations.Categories.RESEARCH, Expansions.ROYALTY},
+    11_113, {Researches.CIRCADIANINFLUENCE, Locations.Categories.RESEARCH, Expansions.ROYALTY},        
+}

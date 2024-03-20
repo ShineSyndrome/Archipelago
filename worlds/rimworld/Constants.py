@@ -85,7 +85,7 @@ class Researches:
     BIONICS = "Bionics"
     SNIPERTURRET = "SniperTurret"
     ROCKETSWARMLAUNCHER = "RocketswarmLauncher"
-    SHIPRESEARCHPROJECTBASE = "ShipResearchProjectBase"
+    SHIPBASICS = "ShipBasics"
     SHIPCRYPTOSLEEP = "ShipCryptosleep"
     SHIPREACTOR = "ShipReactor"
     SHIPENGINE = "ShipEngine"
@@ -128,4 +128,64 @@ class Researches:
     HARPSICHORD = "Harpsichord"
     PIANO = "Piano"
 
-
+class ScenarioStartingTech:
+    CRASHLANDED = [
+        Researches.PASSIVECOOLER, 
+        Researches.STONECUTTING,
+        Researches.COMPLEXCLOTHING,
+        Researches.COMPLEXFURNITURE,
+        Researches.ELECTRICITY,
+        Researches.AIRCONDITIONING,
+        Researches.NUTRIENTPASTE]
+    LOSTTRIBE = [
+        Researches.TREESOWING,
+        Researches.RECURVEBOW,
+        Researches.PSYCHOIDBREWING,
+        Researches.PASSIVECOOLER,
+        Researches.PEMMICAN
+    ]
+    RICHEXPLORER = [
+        Researches.PASSIVECOOLER,
+        Researches.STONECUTTING,
+        Researches.COMPLEXCLOTHING,
+        Researches.SMITHING,
+        Researches.COMPLEXFURNITURE,
+        Researches.ELECTRICITY,
+        Researches.AIRCONDITIONING,
+        Researches.MACHINING,
+        Researches.GUNSMITHING,
+        Researches.NUTRIENTPASTE,
+        Researches.BLOWBACKOPERATION,
+        Researches.GUNTURRETS
+    ]
+    NAKEDBRUTALITY = [
+        Researches.PASSIVECOOLER,
+        Researches.STONECUTTING,
+        Researches.COMPLEXCLOTHING,
+        Researches.COMPLEXFURNITURE,
+        Researches.ELECTRICITY,
+        Researches.AIRCONDITIONING,
+        Researches.NUTRIENTPASTE
+    ]
+    MECHANITOR = [
+        Researches.PASSIVECOOLER, 
+        Researches.STONECUTTING,
+        Researches.COMPLEXCLOTHING,
+        Researches.COMPLEXFURNITURE,
+        Researches.ELECTRICITY,
+        Researches.AIRCONDITIONING,
+        Researches.NUTRIENTPASTE,
+        Researches.MICROELECTRONICSBASICS,
+        Researches.BASICMECHTECH,
+        Researches.BATTERIES
+    ]
+    SANGUOPHAGE = [
+        Researches.PASSIVECOOLER, 
+        Researches.STONECUTTING,
+        Researches.COMPLEXCLOTHING,
+        Researches.COMPLEXFURNITURE,
+        Researches.ELECTRICITY,
+        Researches.AIRCONDITIONING,
+        Researches.NUTRIENTPASTE,
+        Researches.DEATHREST
+    ]
