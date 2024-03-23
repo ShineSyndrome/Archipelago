@@ -1,13 +1,11 @@
-from typing import List, Dict
+from typing import Dict
 
-from BaseClasses import Entrance, Region, Tutorial, MultiWorld
-from . import Constants
-from .Items import item_table, RimWorldItem, get_items_by_category
-from .Locations import build_location_table, RimWorldLocation, RimWorldLocationData
-from .Options import rimworld_options
-from .data import research_items
+from BaseClasses import Tutorial
+from .items import all_items_name_to_id, electricity_research_item
+from .locations import all_locations_name_to_id
+from .options import RimWorldOptions, StartingScenario
+from .regions import create_regions
 from ..AutoWorld import WebWorld, World
-
 
 class RimWorldWeb(WebWorld):
     tutorials = [Tutorial(
@@ -17,128 +15,59 @@ class RimWorldWeb(WebWorld):
         "English",
         "rimworld_en.md",
         "rimworld/en",
-        ["Stephen Lujan"]
+        ["Rob Gardner"]
     )]
-
 
 class RimWorldWorld(World):
     """
     RimWorld is a sci-fi colony sim driven by an intelligent AI storyteller.
-    Inspired by Dwarf Fortress, Firefly, and Dune. You begin with three
-    survivors of a shipwreck on a distant world. Manage colonists' moods,
+    Inspired by Dwarf Fortress, Firefly, and Dune. 
+    You begin with survivors of a shipwreck on a distant world. Manage colonists' moods,
     needs, wounds, illnesses and addictions. Build in the forest, desert,
     jungle, tundra, and more.
     """
     game = "RimWorld"
     web = RimWorldWeb()
-    option_definitions = rimworld_options
-    # not all of these items will be present in every game but there needs to be a fixed name:id mapping here
-    item_name_to_id = {name: data.archipelago_id for name, data in item_table.items()}
-    # not all of these locations will be present in every game but there needs to be a fixed name:id mapping here
-    location_name_to_id = {name: data.archipelago_id for name, data in build_location_table(300, 300, 300).items()}
+    options_dataclass = RimWorldOptions
+    options: RimWorldOptions
 
-    topology_present = False  # show path to required location checks in spoiler
+    item_name_to_id = all_items_name_to_id
+    location_name_to_id = all_locations_name_to_id
 
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 0
+    def generate_early(self) -> None:
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
-        self.locations_data = build_location_table(
-            self.get_setting(Constants.Options.RESEARCH_LOCATIONS_QUANTITY),
-            self.get_setting(Constants.Options.CRAFT_LOCATIONS_QUANTITY),
-            self.get_setting(Constants.Options.PURCHASE_LOCATIONS_QUANTITY),
-        )
-        self.locations: List[RimWorldLocation] = []
+        if self.options.starting_scenario.value == StartingScenario.option_lost_tribe_early_power:
+            self.multiworld.local_early_items[self.player][electricity_research_item.identifier()] = 1
 
-    def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player].value
+        self._validate_options()
 
-    def create_regions(self):
-        # some basic regions are needed for any game to work in archipelago
-        player = self.player
-        menu = Region("Menu", player, self.multiworld)
-        game_start = Entrance(player, "Start Game", menu)
-        menu.exits.append(game_start)
-        planet = Region("RimWorld", player, self.multiworld)
-        game_start.connect(planet)
-        self.multiworld.regions += [menu, planet]
+    def create_regions(self) -> None:
+        create_regions(self.multiworld, self.player, self.options)
 
-        # add locations
-        self.locations: List[RimWorldLocation] = [RimWorldLocation(player, name, loc.archipelago_id, planet)
-                                                  for name, loc in self.locations_data.items()]
-        planet.locations.extend(self.locations)
+    def create_items(self) -> None:
+        """
+        Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
+        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
+        """
+        pass
 
-    def generate_basic(self):
-        item_pool: List[RimWorldItem] = []
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
-        for name, item in item_table.items():
+    def set_rules(self) -> None:
+        """Method for setting the rules on the World's regions and locations."""
+        pass
 
-            if item.category == Constants.Items.Categories.FILLER:
-                continue
-            if not self.get_setting(Constants.Options.ROYALTY) and item.expansion == Constants.Items.Expansions.ROYALTY:
-                continue
-            if not self.get_setting(
-                    Constants.Options.IDEOLOGY) and item.expansion == Constants.Items.Expansions.IDEOLOGY:
-                continue
-            if not self.get_setting(Constants.Options.BIOTECH) and item.expansion == Constants.Items.Expansions.BIOTECH:
-                continue
-            quantity = item.max_quantity
-            item_pool += [self.create_item(name) for _ in range(0, quantity)]
+    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
+        """Fill in the `slot_data` field in the `Connected` network package.
+        This is a way the generator can give custom data to the client.
+        The client will receive this as JSON in the `Connected` response.
 
-        # Fill any empty locations with filler items.
-        while len(item_pool) < total_locations:
-            item_pool.append(self.create_item(self.get_filler_item_name()))
+        The generation does not wait for `generate_output` to complete before calling this.
+        `threading.Event` can be used if you need to wait for something from `generate_output`."""
+        return {}
 
-        self.multiworld.itempool += item_pool
+    def _validate_options(self):
+        
+        biotech_starting_scenario = self.options.starting_scenario.value in [StartingScenario.option_mechanitor, StartingScenario.option_sanguophage]
 
-    def get_filler_item_name(self) -> str:
-        # TODO
-        fillers = get_items_by_category(Constants.Items.Categories.FILLER)
-        weights = [item.weight for item in fillers.values()]
-        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
-
-    def create_item(self, name: str) -> RimWorldItem:
-        item = item_table[name]
-        return RimWorldItem(name, item.classification, item.archipelago_id, self.player)
-
-    def fill_slot_data(self) -> Dict[str, object]:
-        slot_data: Dict[str, object] = {}
-
-        research_locations = [value for key, value in self.locations_data.items()
-                              if value.category == Constants.Locations.Categories.RESEARCH]
-        tech_tree = Locations.build_research_tech_tree(
-            research_locations,
-            self.get_setting(Constants.Options.MIN_RESEARCH_COST),
-            self.get_setting(Constants.Options.MAX_RESEARCH_COST)
-        )
-        slot_data['techTree'] = tech_tree  # json.dumps(tech_tree, separators=(',', ':'))
-
-        slot_data['item_id_to_rimworld_def'] = self._item_id_to_rimworld_def()
-
-        return slot_data
-
-    def have_expansion(self, expansion) -> bool:
-        return (expansion == Constants.Items.Expansions.CORE
-                or (expansion == Constants.Items.Expansions.ROYALTY and self.get_setting(Constants.Options.ROYALTY))
-                or (expansion == Constants.Items.Expansions.BIOTECH and self.get_setting(Constants.Options.BIOTECH))
-                or (expansion == Constants.Items.Expansions.IDEOLOGY and self.get_setting(Constants.Options.IDEOLOGY)))
-
-    def _item_id_to_rimworld_def(self) -> Dict[int, tuple[str, str]]:
-        expansions = []
-        if self.get_setting(Constants.Options.ROYALTY):
-            expansions.append(Constants.Items.Expansions.ROYALTY)
-        if self.get_setting(Constants.Options.BIOTECH):
-            expansions.append(Constants.Items.Expansions.BIOTECH)
-        if self.get_setting(Constants.Options.IDEOLOGY):
-            expansions.append(Constants.Items.Expansions.IDEOLOGY)
-
-        return {
-            value.archipelago_id: {
-                'defName': value.defName,
-                'defType': value.defType,
-            } for value in
-            Items.get_items_by_category(Constants.Items.Categories.RESEARCH, expansions).values()
-        }
+        if not self.options.biotech_expansion and biotech_starting_scenario:
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s RimWorld settings aren't supported."
+                f" The chosen starting scenario requires enabling Biotech DLC.")

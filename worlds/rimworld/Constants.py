@@ -1,3 +1,5 @@
+from .options import StartingScenario
+
 class Expansions:
     CORE = "core"
     IDEOLOGY = "ideology"
@@ -189,3 +191,13 @@ class ScenarioStartingTech:
         Researches.NUTRIENTPASTE,
         Researches.DEATHREST
     ]
+
+starting_tech_dict = {
+    StartingScenario.option_crash_landed: ScenarioStartingTech.CRASHLANDED,
+    StartingScenario.option_lost_tribe: ScenarioStartingTech.LOSTTRIBE,
+    StartingScenario.option_lost_tribe_early_power: ScenarioStartingTech.LOSTTRIBE,
+    StartingScenario.option_mechanitor: ScenarioStartingTech.MECHANITOR,
+    StartingScenario.option_naked_brutality: ScenarioStartingTech.NAKEDBRUTALITY,
+    StartingScenario.option_rich_explorer: ScenarioStartingTech.RICHEXPLORER,
+    StartingScenario.option_sanguophage: ScenarioStartingTech.SANGUOPHAGE
+}

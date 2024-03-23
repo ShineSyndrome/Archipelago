@@ -1,18 +1,13 @@
-import typing
+from dataclasses import dataclass
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions
 
-from Options import Toggle, Option, Range
-from .Constants import Options
-
-
-class RoyaltyExpansion(Toggle):
+class RoyaltyExpansion(DefaultOnToggle):
     """
     Include technology from the Royalty DLC.
     """
     display_name = "Include Royalty Expansion"
-    default = 1
 
-
-class IdeologyExpansion(Toggle):
+class IdeologyExpansion(DefaultOnToggle):
     """
     Include technology from the Ideology DLC
     """
@@ -20,72 +15,36 @@ class IdeologyExpansion(Toggle):
     default = 1
 
 
-class BiotechExpansion(Toggle):
+class BiotechExpansion(DefaultOnToggle):
     """
     Include technology from the Biotech DLC
     """
     display_name = "Include Biotech Expansion"
     default = 1
 
-
-class TechLocationsQuantity(Range):
+class StartingScenario(Choice):
+    """The starting scenario for your colony (Starting the game with a different scenario than selected here will cause unreachable checks).
+    Crash Landed: Three pawns with some modern technology unlocked, including electricity.
+    Lost Tribe: Five pawns with low technology.
+    Lost Tribe & Early Electricity: As above, but guarantees electricity can be found early in your world.
+    Rich Explorer: One rich pawn with modern technology, including technologies related to gun manufacture.
+    Naked Brutality: One pawn, alone and unprepared. They have modern technology unlocked, including electricity.
+    Mechanitor: Requires the Biotech DLC. One advanced pawn with some advanced technology unlocked.
+    Sanguophage: One vampire and one human with modern technology. Also has Deathrest unlocked.
     """
-    How many Archipelago items are added to the Archipelago research tree.
-    """
-    display_name = "Researchable Items"
-    default = 50
-    range_start = 0
-    range_end = 300
+    display_name = "Starting Scenario"
+    default = 0
+    option_crash_landed = 0
+    option_lost_tribe = 1
+    option_lost_tribe_early_power = 2
+    option_rich_explorer = 3
+    option_naked_brutality = 4
+    option_mechanitor = 5
+    option_sanguophage = 6
 
-
-class CraftingLocationsQuantity(Range):
-    """
-    How many Archipelago items are added to the Archipelago work bench.
-    """
-    display_name = "Craftable Items"
-    default = 50
-    range_start = 0
-    range_end = 300
-
-
-class PurchasableLocationsQuantity(Range):
-    """
-    How many Archipelago items in total are available from Rimworld trades.
-    """
-    display_name = "Purchasable Items"
-    default = 50
-    range_start = 0
-    range_end = 300
-
-
-class MinimumResearchCost(Range):
-    """
-    How much work does it take to research the least expensive Archipelago item.
-    """
-    display_name = "Minimum Research Cost"
-    default = 50
-    range_start = 10
-    range_end = 3000
-
-
-class MaximumResearchCost(Range):
-    """
-    How much work does it take to research the most expensive Archipelago item.
-    """
-    display_name = "Maximum Research Cost"
-    default = 1000
-    range_start = 10
-    range_end = 3000
-
-
-# By convention, we call the options dict variable `<world>_options`.
-rimworld_options: typing.Dict[str, type(Option)] = {
-    Options.ROYALTY: RoyaltyExpansion,
-    Options.IDEOLOGY: IdeologyExpansion,
-    Options.BIOTECH: BiotechExpansion,
-    Options.RESEARCH_LOCATIONS_QUANTITY: TechLocationsQuantity,
-    Options.CRAFT_LOCATIONS_QUANTITY: CraftingLocationsQuantity,
-    Options.PURCHASE_LOCATIONS_QUANTITY: PurchasableLocationsQuantity,
-    Options.MAX_RESEARCH_COST: MaximumResearchCost,
-    Options.MIN_RESEARCH_COST: MinimumResearchCost,
-}
+@dataclass
+class RimWorldOptions(PerGameCommonOptions):
+    royalty_expansion: RoyaltyExpansion
+    ideology_expansion: IdeologyExpansion
+    biotech_expansion: BiotechExpansion
+    starting_scenario: StartingScenario
