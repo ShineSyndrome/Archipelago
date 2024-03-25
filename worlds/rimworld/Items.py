@@ -1,9 +1,7 @@
-from typing import Dict, NamedTuple, Optional, Callable
-
-from BaseClasses import Item, ItemClassification
-from .data.research import *
-from .data.research_items import *
-from .constants import Items, Researches, Expansions
+from typing import Dict, NamedTuple
+from BaseClasses import Item, ItemClassification, MultiWorld
+from .options import RimWorldOptions
+from .constants import *
 
 class RimWorldItem(Item):
     game: str = "RimWorld"
@@ -17,6 +15,19 @@ class RimWorldItemData(NamedTuple):
 
     def identifier(self) -> str:
       return f"{self.category}: {self.defName}"
+    
+def create_items(multiworld: MultiWorld, player: int, options: RimWorldOptions):
+
+    research_item_data = core_research_items
+    if options.biotech_expansion: research_item_data.append(biotech_research_items)
+    if options.royalty_expansion: research_item_data.append(royalty_research_items)
+    if options.ideology_expansion: research_item_data.append(ideology_research_items)
+
+    research_items = [RimWorldItem(item.identifier, item.classification, key, player) for key, item in research_item_data.items()]
+    research_items = [item for item in research_items if item not in starting_tech_dict[options.starting_scenario]]
+    
+    for item in research_items:
+      multiworld.itempool.append(item)
 
 electricity_research_item = RimWorldItemData(Researches.ELECTRICITY, 'research: electricity', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
 
@@ -42,7 +53,7 @@ core_research_items: Dict[int, RimWorldItemData] = {
     1019: RimWorldItemData(Researches.LONGBLADES, 'research: long blades', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1020: RimWorldItemData(Researches.PLATEARMOR, 'research: plate armor', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1021: RimWorldItemData(Researches.GREATBOW, 'research: greatbow', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
-    1022: electricity,
+    1022: electricity_research_item,
     1023: RimWorldItemData(Researches.BATTERIES, 'research: battery', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1024: RimWorldItemData(Researches.BIOFUELREFINING, 'research: biofuel refining', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1025: RimWorldItemData(Researches.WATERMILLGENERATOR, 'research: watermill generator', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
