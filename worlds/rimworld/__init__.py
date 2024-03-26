@@ -1,7 +1,8 @@
 from typing import Dict
 
 from BaseClasses import Tutorial
-from .items import all_items_name_to_id, electricity_research_item
+from worlds.rimworld.rules import set_rules
+from .items import RimWorldItem, all_items_name_to_id, create_item, create_items, electricity_research_item
 from .locations import all_locations_name_to_id
 from .options import RimWorldOptions, StartingScenario
 from .regions import create_regions
@@ -36,26 +37,24 @@ class RimWorldWorld(World):
 
     def generate_early(self) -> None:
 
+        self._validate_options()
+
         if self.options.starting_scenario.value == StartingScenario.option_lost_tribe_early_power:
             self.multiworld.local_early_items[self.player][electricity_research_item.identifier()] = 1
-
-        self._validate_options()
 
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.player, self.options)
 
     def create_items(self) -> None:
-        """
-        Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
-        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
-        """
-        pass
+        create_items(self.multiworld, self.player, self.options)
+
+    def create_item(self, item: str) -> RimWorldItem:
+        return create_item(item, self.player)
 
     def set_rules(self) -> None:
-        """Method for setting the rules on the World's regions and locations."""
-        pass
+        set_rules(self.multiworld, self.player, self.options)
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
+    def fill_slot_data(self) -> Dict[str, Any]: 
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.

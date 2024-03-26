@@ -19,17 +19,33 @@ class RimWorldItemData(NamedTuple):
 def create_items(multiworld: MultiWorld, player: int, options: RimWorldOptions):
 
     research_item_data = core_research_items
-    if options.biotech_expansion: research_item_data.append(biotech_research_items)
-    if options.royalty_expansion: research_item_data.append(royalty_research_items)
-    if options.ideology_expansion: research_item_data.append(ideology_research_items)
+    if options.biotech_expansion: research_item_data.update(biotech_research_items)
+    if options.royalty_expansion: research_item_data.update(royalty_research_items)
+    if options.ideology_expansion: research_item_data.update(ideology_research_items)
 
-    research_items = [RimWorldItem(item.identifier, item.classification, key, player) for key, item in research_item_data.items()]
+    research_items = [RimWorldItem(item.identifier(), item.classification, key, player) for key, item in research_item_data.items()]
     research_items = [item for item in research_items if item not in starting_tech_dict[options.starting_scenario]]
-    
+
     for item in research_items:
       multiworld.itempool.append(item)
 
+def create_item(itemName: str, player: int) -> RimWorldItem:
+    
+    item_id = all_items_name_to_id[itemName]
+    item_data = all_items[item_id]
+
+    return RimWorldItem(item_data.identifier(), item_data.classification, item_id, player)
+
+#Potential progressive items
 electricity_research_item = RimWorldItemData(Researches.ELECTRICITY, 'research: electricity', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+micro_electronics_research_item = RimWorldItemData(Researches.MICROELECTRONICSBASICS, 'research: microelectronics', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+multi_analyzer_research_item = RimWorldItemData(Researches.MULTIANALYZER, 'research: multi-analyzer', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+ship_basics_research_item = RimWorldItemData(Researches.SHIPBASICS, 'research: starflight basics', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+ship_crypto_sleep_research_item = RimWorldItemData(Researches.SHIPCRYPTOSLEEP, 'research: vacuum cryptosleep casket', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+ship_reactor_research_item = RimWorldItemData(Researches.SHIPREACTOR, 'research: starship reactor', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+ship_engine_research_item = RimWorldItemData(Researches.SHIPENGINE, 'research: Johnson-Tanaka drive', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+ship_computer_core_research_item = RimWorldItemData(Researches.SHIPCOMPUTERCORE, 'research: machine persuasion', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)
+ship_sensor_research_item = RimWorldItemData(Researches.SHIPSENSORCLUSTER, 'research: starflight sensors', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression)   
 
 core_research_items: Dict[int, RimWorldItemData] = {
     1001: RimWorldItemData(Researches.PSYCHOIDBREWING, 'research: psychoid brewing', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
@@ -79,7 +95,7 @@ core_research_items: Dict[int, RimWorldItemData] = {
     1045: RimWorldItemData(Researches.GASOPERATION, 'research: gas operation', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1046: RimWorldItemData(Researches.GUNTURRETS, 'research: gun turrets', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1047: RimWorldItemData(Researches.FOAMTURRET, 'research: foam turret', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.filler),
-    1048: RimWorldItemData(Researches.MICROELECTRONICSBASICS, 'research: microelectronics', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
+    1048: micro_electronics_research_item,
     1049: RimWorldItemData(Researches.FLATSCREENTELEVISION, 'research: flatscreen television', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.filler),
     1050: RimWorldItemData(Researches.MOISTUREPUMP, 'research: moisture pump', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.filler),
     1051: RimWorldItemData(Researches.HOSPITALBED, 'research: hospital bed', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
@@ -92,7 +108,7 @@ core_research_items: Dict[int, RimWorldItemData] = {
     1058: RimWorldItemData(Researches.PRECISIONRIFLING, 'research: precision rifling', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1059: RimWorldItemData(Researches.HEAVYTURRETS, 'research: autocannon turret', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1060: RimWorldItemData(Researches.MULTIBARRELWEAPONS, 'research: multibarrel weapons', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
-    1061: RimWorldItemData(Researches.MULTIANALYZER, 'research: multi-analyzer', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
+    1061: multi_analyzer_research_item,
     1062: RimWorldItemData(Researches.VITALSMONITOR, 'research: vitals monitor', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1063: RimWorldItemData(Researches.FABRICATION, 'research: fabrication', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful), 
     1064: RimWorldItemData(Researches.ADVANCEDFABRICATION, 'research: advanced fabrication', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
@@ -103,12 +119,12 @@ core_research_items: Dict[int, RimWorldItemData] = {
     1069: RimWorldItemData(Researches.BIONICS, 'research: bionics', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1070: RimWorldItemData(Researches.SNIPERTURRET, 'research: uranium slug turret', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
     1071: RimWorldItemData(Researches.ROCKETSWARMLAUNCHER, 'research: rocketswarm launcher', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.useful),
-    1072: RimWorldItemData(Researches.SHIPBASICS, 'research: starflight basics', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
-    1073: RimWorldItemData(Researches.SHIPCRYPTOSLEEP, 'research: vacuum cryptosleep casket', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
-    1074: RimWorldItemData(Researches.SHIPREACTOR, 'research: starship reactor', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
-    1075: RimWorldItemData(Researches.SHIPENGINE, 'research: Johnson-Tanaka drive', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
-    1076: RimWorldItemData(Researches.SHIPCOMPUTERCORE, 'research: machine persuasion', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),
-    1077: RimWorldItemData(Researches.SHIPSENSORCLUSTER, 'research: starflight sensors', Items.Categories.RESEARCH, Expansions.CORE, ItemClassification.progression),                        
+    1072: ship_basics_research_item,
+    1073: ship_crypto_sleep_research_item,
+    1074: ship_reactor_research_item,
+    1075: ship_engine_research_item,
+    1076: ship_computer_core_research_item,
+    1077: ship_sensor_research_item,                        
 }
 
 biotech_research_items: Dict[int, RimWorldItemData] = {

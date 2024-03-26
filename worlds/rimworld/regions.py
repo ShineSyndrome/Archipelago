@@ -18,6 +18,10 @@ class RegionNames:
     HITECH_RESEARCH = "HITECH_RESEARCH"
     MA_RESEARCH = "MA_RESEARCH"
 
+class ExitNames:
+    CAN_HITECH_RESEARCH = "CAN_HITECH_RESEARCH"
+    CAN_MA_RESEARCH = "CAN_MA_RESEARCH"
+
 def create_regions(multiworld: MultiWorld, player: int, options: RimWorldOptions):
     
     filtered_simple_research = filter_starting_tech(simple_research_locations, options.starting_scenario.value)
@@ -32,8 +36,8 @@ def create_regions(multiworld: MultiWorld, player: int, options: RimWorldOptions
     ma_research_region =  create_region(multiworld, player, filtered_ma_research, RegionNames.MA_RESEARCH)
 
     menu_region.connect(simple_research_region)
-    simple_research_region.connect(hitech_research_region)
-    hitech_research_region.connect(ma_research_region)
+    simple_research_region.add_exits(RegionNames.HITECH_RESEARCH, ExitNames.CAN_HITECH_RESEARCH)
+    hitech_research_region.add_exits(RegionNames.MA_RESEARCH, ExitNames.CAN_MA_RESEARCH)
 
     multiworld.regions += menu_region
     multiworld.regions += simple_research_region
