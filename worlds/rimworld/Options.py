@@ -6,6 +6,7 @@ class RoyaltyExpansion(DefaultOnToggle):
     Include technology from the Royalty DLC.
     """
     display_name = "Include Royalty Expansion"
+    default = 1
 
 class IdeologyExpansion(DefaultOnToggle):
     """

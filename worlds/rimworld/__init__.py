@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Dict
 
 from BaseClasses import Tutorial
 from worlds.rimworld.rules import set_rules
@@ -55,13 +55,14 @@ class RimWorldWorld(World):
         set_rules(self.multiworld, self.player, self.options)
 
     def fill_slot_data(self) -> Dict[str, Any]: 
-        """Fill in the `slot_data` field in the `Connected` network package.
-        This is a way the generator can give custom data to the client.
-        The client will receive this as JSON in the `Connected` response.
-
-        The generation does not wait for `generate_output` to complete before calling this.
-        `threading.Event` can be used if you need to wait for something from `generate_output`."""
-        return {}
+        slot_data: Dict[str, Any] = {
+            "scenario": self.options.starting_scenario.value,
+            "biotech": self.options.biotech_expansion.value,
+            "royalty": self.options.royalty_expansion.value,
+            "ideology": self.options.ideology_expansion.value,
+        }
+        
+        return slot_data
 
     def _validate_options(self):
         
