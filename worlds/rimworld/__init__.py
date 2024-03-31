@@ -8,16 +8,18 @@ from .options import RimWorldOptions, StartingScenario
 from .regions import create_regions
 from ..AutoWorld import WebWorld, World
 
+
 class RimWorldWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up Rimworld for Archipelago. "
+        "A guide to setting up RimWorld for Archipelago. "
         "This guide covers single-player, multiworld, and related software.",
         "English",
         "rimworld_en.md",
         "rimworld/en",
         ["Rob Gardner"]
     )]
+
 
 class RimWorldWorld(World):
     """
@@ -54,20 +56,21 @@ class RimWorldWorld(World):
     def set_rules(self) -> None:
         set_rules(self.multiworld, self.player, self.options)
 
-    def fill_slot_data(self) -> Dict[str, Any]: 
+    def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "scenario": self.options.starting_scenario.value,
             "biotech": self.options.biotech_expansion.value,
             "royalty": self.options.royalty_expansion.value,
             "ideology": self.options.ideology_expansion.value,
         }
-        
+
         return slot_data
 
     def _validate_options(self):
-        
-        biotech_starting_scenario = self.options.starting_scenario.value in [StartingScenario.option_mechanitor, StartingScenario.option_sanguophage]
+
+        biotech_starting_scenario = self.options.starting_scenario.value in [StartingScenario.option_mechanitor,
+                                                                             StartingScenario.option_sanguophage]
 
         if not self.options.biotech_expansion and biotech_starting_scenario:
             raise Exception(f"{self.multiworld.get_player_name(self.player)}'s RimWorld settings aren't supported."
-                f" The chosen starting scenario requires enabling Biotech DLC.")
+                            f" The chosen starting scenario requires enabling Biotech DLC.")

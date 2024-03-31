@@ -1,12 +1,14 @@
 from dataclasses import dataclass
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions
 
+
 class RoyaltyExpansion(DefaultOnToggle):
     """
     Include technology from the Royalty DLC.
     """
     display_name = "Include Royalty Expansion"
     default = 1
+
 
 class IdeologyExpansion(DefaultOnToggle):
     """
@@ -23,8 +25,10 @@ class BiotechExpansion(DefaultOnToggle):
     display_name = "Include Biotech Expansion"
     default = 1
 
+
 class StartingScenario(Choice):
-    """The starting scenario for your colony (Starting the game with a different scenario than selected here will cause unreachable checks).
+    """The starting scenario for your colony
+    (Starting the game with a different scenario than selected here will cause unreachable checks).
     Crash Landed: Three pawns with some modern technology unlocked, including electricity.
     Lost Tribe: Five pawns with low technology.
     Lost Tribe & Early Electricity: As above, but guarantees electricity can be found early in your world.
@@ -42,6 +46,7 @@ class StartingScenario(Choice):
     option_naked_brutality = 4
     option_mechanitor = 5
     option_sanguophage = 6
+
 
 @dataclass
 class RimWorldOptions(PerGameCommonOptions):

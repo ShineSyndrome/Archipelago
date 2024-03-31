@@ -1,19 +1,23 @@
 from .options import StartingScenario
 
+
 class Expansions:
     CORE = "core"
     IDEOLOGY = "ideology"
     ROYALTY = "royalty"
     BIOTECH = "biotech"
 
-#More categories coming soon
+
+# More categories coming soon
 class Locations:
     class Categories:
         RESEARCH = "Research"
 
+
 class Items:
     class Categories:
         RESEARCH = "Research"
+
 
 class Researches:
     PSYCHOIDBREWING = "PsychoidBrewing"
@@ -37,16 +41,16 @@ class Researches:
     LONGBLADES = "LongBlades"
     PLATEARMOR = "PlateArmor"
     GREATBOW = "Greatbow"
-    ELECTRICITY =  "Electricity"
+    ELECTRICITY = "Electricity"
     BATTERIES = "Batteries"
     BIOFUELREFINING = "BiofuelRefining"
     WATERMILLGENERATOR = "WatermillGenerator"
     NUTRIENTPASTE = "NutrientPaste"
-    SOLARPANELS =  "SolarPanels"
+    SOLARPANELS = "SolarPanels"
     AIRCONDITIONING = "AirConditioning"
     AUTODOORS = "Autodoors"
     HYDROPONICS = "Hydroponics"
-    TUBETELEVISION = "TubeTelevision" 
+    TUBETELEVISION = "TubeTelevision"
     PACKAGEDSURVIVALMEAL = "PackagedSurvivalMeal"
     FIREFOAM = "Firefoam"
     IEDS = "IEDs"
@@ -130,9 +134,10 @@ class Researches:
     HARPSICHORD = "Harpsichord"
     PIANO = "Piano"
 
+
 class ScenarioStartingTech:
     CRASHLANDED = [
-        Researches.PASSIVECOOLER, 
+        Researches.PASSIVECOOLER,
         Researches.STONECUTTING,
         Researches.COMPLEXCLOTHING,
         Researches.COMPLEXFURNITURE,
@@ -170,7 +175,7 @@ class ScenarioStartingTech:
         Researches.NUTRIENTPASTE
     ]
     MECHANITOR = [
-        Researches.PASSIVECOOLER, 
+        Researches.PASSIVECOOLER,
         Researches.STONECUTTING,
         Researches.COMPLEXCLOTHING,
         Researches.COMPLEXFURNITURE,
@@ -182,7 +187,7 @@ class ScenarioStartingTech:
         Researches.BATTERIES
     ]
     SANGUOPHAGE = [
-        Researches.PASSIVECOOLER, 
+        Researches.PASSIVECOOLER,
         Researches.STONECUTTING,
         Researches.COMPLEXCLOTHING,
         Researches.COMPLEXFURNITURE,
@@ -191,6 +196,7 @@ class ScenarioStartingTech:
         Researches.NUTRIENTPASTE,
         Researches.DEATHREST
     ]
+
 
 starting_tech_dict = {
     StartingScenario.option_crash_landed: ScenarioStartingTech.CRASHLANDED,
