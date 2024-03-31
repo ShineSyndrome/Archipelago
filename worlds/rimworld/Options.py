@@ -35,7 +35,7 @@ class StartingScenario(Choice):
     Rich Explorer: One rich pawn with modern technology, including technologies related to gun manufacture.
     Naked Brutality: One pawn, alone and unprepared. They have modern technology unlocked, including electricity.
     Mechanitor: Requires the Biotech DLC. One advanced pawn with some advanced technology unlocked.
-    Sanguophage: One vampire and one human with modern technology. Also has Deathrest unlocked.
+    Sanguophage: Requiores the Biotech DLC. One vampire and one human with modern tech. Also has Deathrest unlocked.
     """
     display_name = "Starting Scenario"
     default = 0
