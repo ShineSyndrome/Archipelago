@@ -48,9 +48,20 @@ class StartingScenario(Choice):
     option_sanguophage = 6
 
 
+# There's more to come! For now, it's important to signal to a user
+# that this is the win condition that logic is formed around.
+class WinCondition(Choice):
+    """The win condition you want to pursue for your colony.
+    Build a Ship: Find all the research required to build your own ship and escape the planet."""
+    display_name = "Win Condition"
+    default = 0
+    option_build_ship = 0
+
+
 @dataclass
 class RimWorldOptions(PerGameCommonOptions):
     royalty_expansion: RoyaltyExpansion
     ideology_expansion: IdeologyExpansion
     biotech_expansion: BiotechExpansion
     starting_scenario: StartingScenario
+    win_condition: WinCondition

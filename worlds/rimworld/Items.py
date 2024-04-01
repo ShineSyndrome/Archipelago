@@ -20,7 +20,7 @@ class RimWorldItemData(NamedTuple):
 
 
 def create_items(multiworld: MultiWorld, player: int, options: RimWorldOptions):
-    research_item_data = core_research_items
+    research_item_data = core_research_items.copy()
     if options.biotech_expansion:
         research_item_data.update(biotech_research_items)
     if options.royalty_expansion:
