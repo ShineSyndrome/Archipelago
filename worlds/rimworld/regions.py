@@ -1,6 +1,9 @@
+from typing import Dict
+
 from BaseClasses import Location, MultiWorld, Region
-from .constants import *
-from .locations import *
+from .constants import starting_tech_dict, Expansions
+from .locations import simple_research_locations, hitech_research_locations, multi_analyzer_research_locations, \
+    RimWorldLocationData
 from .options import RimWorldOptions
 
 

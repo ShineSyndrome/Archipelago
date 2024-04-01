@@ -1,6 +1,10 @@
+from BaseClasses import MultiWorld
 from worlds.generic.Rules import set_rule
+from .items import micro_electronics_research_item, multi_analyzer_research_item, ship_basics_research_item, \
+    ship_computer_core_research_item, ship_crypto_sleep_research_item, ship_engine_research_item, \
+    ship_reactor_research_item, ship_sensor_research_item, electricity_research_item
 from .regions import ExitNames
-from .items import *
+from .options import RimWorldOptions
 
 
 def set_rules(multiworld: MultiWorld, player: int, options: RimWorldOptions) -> None:

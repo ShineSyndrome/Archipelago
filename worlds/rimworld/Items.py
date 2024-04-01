@@ -1,7 +1,8 @@
 from typing import Dict, NamedTuple
 from BaseClasses import Item, ItemClassification, MultiWorld
+from .constants import starting_tech_dict, Researches, Items, Expansions
 from .options import RimWorldOptions
-from .constants import *
+
 
 
 class RimWorldItem(Item):
