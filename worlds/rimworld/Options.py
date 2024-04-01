@@ -12,7 +12,7 @@ class RoyaltyExpansion(DefaultOnToggle):
 
 class IdeologyExpansion(DefaultOnToggle):
     """
-    Include technology from the Ideology DLC
+    Include technology from the Ideology DLC.
     """
     display_name = "Include Ideology Expansion"
     default = 1
@@ -20,7 +20,7 @@ class IdeologyExpansion(DefaultOnToggle):
 
 class BiotechExpansion(DefaultOnToggle):
     """
-    Include technology from the Biotech DLC
+    Include technology from the Biotech DLC.
     """
     display_name = "Include Biotech Expansion"
     default = 1
