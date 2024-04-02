@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
 from BaseClasses import Tutorial
-from worlds.rimworld.rules import set_rules
+from .rules import set_rules
 from .items import RimWorldItem, all_items_name_to_id, create_item, create_items, electricity_research_item
 from .locations import all_locations_name_to_id
 from .options import RimWorldOptions, StartingScenario
